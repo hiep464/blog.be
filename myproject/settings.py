@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fkriq)1*aazjc(w#0-l&onxfu+&n62v9^lif#f%p428jikpmv8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp", "hieplv.store"]
+ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp"]
 
 
 # Application definition
@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'myapp',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'corsheaders',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'main/templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,17 +126,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/var/www/music/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+AWS_QUERYSTRING_AUTH = False
 CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
@@ -170,3 +174,12 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'vi'
 
 MODELTRANSLATION_LANGUAGES = ('vi', 'en')
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://3.0.50.128',
+    'http://kakojp.jp'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://kakojp.jp'
+]

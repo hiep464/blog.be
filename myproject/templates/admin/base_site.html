@@ -1,0 +1,144 @@
+{% extends "admin/base_site.html" %}
+{% comment %}code for admin language select box  {% endcomment %}
+{% load i18n %}
+{% block userlinks %}
+<script>
+    CKEDITOR.on('dialogDefinition', function(ev) {
+      let dialogName       = ev.data.name;
+      let dialogDefinition = ev.data.definition;
+      console.log(ev);
+      if (dialogName == 'image2') {
+        dialogDefinition.onFocus = function() {
+          /**
+           * 'none' is no good for us - if is none - reset to 'center'
+           * if it's already 'left','center', or 'right' - leave alone.
+           */
+          if (this.getContentElement('info', 'align')
+              .getValue() === 'none') {
+            this.getContentElement('info', 'align')
+                .setValue('center');
+          }
+        };
+        var infoTab = ev.data.definition.getContents('info');
+        var src_field = infoTab.elements[0].children[0].children[0];
+        var widthfield = infoTab.elements[2].children[0];
+        var height_field = infoTab.elements[2].children[1];
+        var src_was_changed = 0;
+
+        // Add a change function to the height field.
+        height_field.onChange = heightChanged;
+
+        // We need to add a change event to the src field but it already has
+        // one from image2 plugin. Replace it with our own but keep a reference
+        // and call it with CKEditor tools.
+        // https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_tools.html#method-override
+        src_field.onChange = CKEDITOR.tools.override(src_field.onChange, function(original) {
+          return function() {
+            // Call the original image2 onChangeSrc() function.
+            original.call(this);
+            var dialog = this.getDialog();
+            var widget_image_src = 0;
+            if (ev.editor.widgets.selected.length) {
+              widget_image_src = ev.editor.widgets.selected[0].data.src;
+            }
+            // Fire only when image src is set and has actually changed.
+            if (this.getValue() && (this.getValue() !== widget_image_src)) {
+              var initial_width = 300;
+              var initial_height = 300;
+              if (typeof initial_width !== 'undefined' || typeof initial_height !== 'undefined') {
+                // Set a flag to be used in heightChanged().
+                src_was_changed = 1;
+              }
+            }
+          }
+        });
+
+        // Change event for the image height field.
+        function heightChanged() {
+          if (src_was_changed) {
+            src_was_changed = 0;
+            var dialog = this.getDialog();
+            var initial_width = 1865;
+            var initial_height = 1865;
+            var width_field = dialog.getContentElement('info', 'width');
+            var height_field = dialog.getContentElement('info', 'height');
+            var new_width = orig_width = width_field.getValue();
+            var new_height = orig_height = height_field.getValue();
+            if (new_height > initial_height) {
+              new_height = initial_height;
+              new_width = Math.round(orig_width * (initial_height / orig_height));
+            }
+            if (new_width > initial_width) {
+              new_width = initial_width;
+              new_height = Math.round(orig_height * (initial_width / orig_width));
+            }
+            width_field.setValue(new_width);
+            height_field.setValue(new_height);
+          }
+        }
+      }
+    });
+    CKEDITOR.replace("editor", {
+      extraAllowedContent : 'ul{margin-top,margin-bottom}'
+      });
+</script>
+    
+{{ block.super }}
+/ <form action="{% url 'set_language' %}" method="post" style="display:inline">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select name="language" onchange="this.form.submit()">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+</form>
+{% endblock %}
+{% block extrastyle %}
+{% comment %} set django admin theme to alway light mode: https://stackoverflow.com/questions/67207144/django-admin-theming {% endcomment %}
+<style>
+    @media (prefers-color-scheme: dark) { 
+        :root {
+            --primary: #79aec8;
+            --primary-fg: #fff;
+
+            --body-fg: #333;
+            --body-bg: #fff;
+            --body-quiet-color: #666;
+            --body-loud-color: #000;
+
+            --breadcrumbs-fg: #c4dce8;
+            --breadcrumbs-bg: var(--primary);
+
+            --link-fg: #447e9b;
+            --link-hover-color: #036;
+            --link-selected-fg: #5b80b2;
+
+            --hairline-color: #e8e8e8;
+            --border-color: #ccc;
+
+            --error-fg: #ba2121;
+
+            --message-success-bg: #dfd;
+            --message-warning-bg: #ffc;
+            --message-error-bg: #ffefef;
+
+            --darkened-bg: #f8f8f8; /* A bit darker than --body-bg */
+            --selected-bg: #e4e4e4; /* ev.g. selected table cells */
+            --selected-row: #ffc;
+
+            --close-button-bg: #888; /* Previously #bbb, contrast 1.92 */
+            --close-button-hover-bg: #747474;
+        }
+    }
+</style>
+{% endblock %}
+
+{% comment %} additional code settings for ckeditor {% endcomment %}
+{% block extrahead %}
+{{ block.super }}
+{% endblock %}

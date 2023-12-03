@@ -1,13 +1,13 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 
 class Blog(models.Model):
-    title = models.TextField(max_length=320, null=False)
-    image = models.ImageField(upload_to='images/', null=False)
-    link = models.URLField(max_length=200, null=True, blank=True)
-    content = RichTextUploadingField(null=False)
+    title = models.TextField(_('title'), max_length=320, null=False)
+    image = models.ImageField(_('image'), upload_to='images/', null=False)
+    link = models.URLField(_('link'), max_length=200, null=True, blank=True)
     LIFE_COACH = 'LIFE_COACH'
     HAND_POINTING = 'HAND_POINTING'
     EDUCATION = 'EDUCATION'
@@ -21,11 +21,13 @@ class Blog(models.Model):
         ("COURSE", "KHÓA HỌC"),
     ]
     category = models.CharField(
+        _('category'),
         choices=CATEGORY,
         max_length=15,
         null=False,
         default=LIFE_COACH
     )
+    content = RichTextUploadingField(_('content'), null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
