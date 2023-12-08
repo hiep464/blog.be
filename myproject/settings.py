@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fkriq)1*aazjc(w#0-l&onxfu+&n62v9^lif#f%p428jikpmv8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp"]
+ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp", "192.168.24"]
 
 
 # Application definition
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -175,11 +176,15 @@ MODELTRANSLATION_DEFAULT_LANGUAGE = 'vi'
 MODELTRANSLATION_LANGUAGES = ('vi', 'en')
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
+# CORS_ALLOW_ALL_ORIGINS=True
+
 CORS_ALLOWED_ORIGINS = [
-    'http://3.0.50.128',
-    'http://kakojp.jp'
+    # 'http://3.0.50.128',
+    # 'http://kakojp.jp',
+    'http://localhost:3000'
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://kakojp.jp'
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://kakojp.jp',
+#     'http://localhost:3000'
+# ]

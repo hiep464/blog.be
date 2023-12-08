@@ -27,6 +27,7 @@ class Blog(models.Model):
         null=False,
         default=LIFE_COACH
     )
+    short_description = models.CharField(max_length=200, null=False)
     content = RichTextUploadingField(_('content'), null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
