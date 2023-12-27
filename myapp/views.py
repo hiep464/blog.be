@@ -135,7 +135,7 @@ class BlogFeatureViews(APIView):
 
     def get(self, request):
         try:
-            blog = Blog.objects.filter(featured=True).order_by('-created_at')[:3]
+            blog = Blog.objects.filter(featured=True).order_by('-created_at')[:6]
             serializer = BlogSerializer(blog, many=True)
             return JsonResponse(
                 data=serializer.data, status=status.HTTP_200_OK, safe=False
@@ -168,6 +168,7 @@ class UserRegisterViews(APIView):
     def post(self, request):
         try:
             serializer = UserRegisterSerializer(data=request.data)
+            serializer.is_valid()
             serializer.save()
             return JsonResponse(
                 data=serializer.data, status=status.HTTP_200_OK, safe=False

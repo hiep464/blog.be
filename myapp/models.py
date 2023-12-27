@@ -10,24 +10,27 @@ class Blog(models.Model):
     # link = models.URLField(_('link'), max_length=200, null=True, blank=True)
     featured = models.BooleanField(default=False, verbose_name='Bài viết nổi bật')
     LIFE_COACH = 'LIFE_COACH'
-    HAND_POINTING = 'HAND_POINTING'
+    FUNCTIONAL_FOODS = 'FUNCTIONAL_FOODS'
     EDUCATION = 'EDUCATION'
     TRANSLATE = 'TRANSLATE'
-    COURSE = 'COURSE'
+    COURSE_LC = 'COURSE_LC'
+    COURSE_HP = 'COURSE_HP'
+    COURSE_JP = 'COURSE_JP'
     INFO = 'INFO'
     CATEGORY = [
         ("LIFE_COACH", "LIFE COACH"),
-        ("HAND_POINTING", "CÁCH XEM CHỈ TAY"),
+        ("FUNCTIONAL_FOODS", "THỰC PHẨM CHỨC NĂNG"),
         ("EDUCATION", "GIÁO DỤC TIẾNG NHẬT"),
         ("TRANSLATE", "PHIÊN DỊCH, DỊCH THUẬT NHẬT-VIỆT"),
         ("COURSE_LC", "KHÓA HỌC LIFE COACH"),
         ("COURSE_HP", "KHÓA HỌC CÁCH XEM CHỈ TAY"),
+        ("COURSE_JP", "KHÓA HỌC TIẾNG NHẬT"),
         ("INFO", "GIỚI THIỆU"),
     ]
     category = models.CharField(
         _('category'),
         choices=CATEGORY,
-        max_length=15,
+        max_length=20,
         null=False,
         default=LIFE_COACH
     )
