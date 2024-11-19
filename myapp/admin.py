@@ -1,29 +1,43 @@
 from django.contrib import admin
-from .models import Blog, LinkYoutube, UserRegister
+from .models import Blog, UserRegister, SubCategory, WebInfoLink, WebInfoHotline, Category, WebInfo
 from rangefilter.filters import (
     DateRangeFilterBuilder,
 )
 
+class SubCategoryInline(admin.TabularInline):
+    model = SubCategory
+    fields = ['name']
+    extra = 5
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    inlines = [SubCategoryInline]
+
+admin.site.register(Category, CategoryAdmin)
+
+class WebInfoLinkInline(admin.TabularInline):
+    model = WebInfoLink
+    fields = ('type', 'url')
+    extra = 5
+
+class WebInfoHotlineInline(admin.TabularInline):
+    model = WebInfoHotline
+    fields = ('type', 'phone')
+    extra = 5
+
+class WebInfoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    inlines = [WebInfoLinkInline, WebInfoHotlineInline]
+
+admin.site.register(WebInfo, WebInfoAdmin)
+
 class BlogAdmin(admin.ModelAdmin):
-    # formfield_overrides = {
-    #     models.TextField: {'widget': RichTextField()},
-    # }
     search_fields = [
         'title',
     ]
     list_display = ('id', 'title')
-    list_filter = ["category", "featured"]
 
 admin.site.register(Blog, BlogAdmin)
-
-class LinkYoutubeAdmin(admin.ModelAdmin):
-    search_fields = [
-        'title',
-    ]
-    list_display = ('id', 'title')
-    list_filter = ["type_video"]
-
-admin.site.register(LinkYoutube, LinkYoutubeAdmin)
 
 class UserRegisterAdmin(admin.ModelAdmin):
     search_fields = [

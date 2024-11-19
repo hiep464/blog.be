@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-fkriq)1*aazjc(w#0-l&onxfu+&n62v9^lif#f%p428jikpmv8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp", "192.168.24"]
+ALLOWED_HOSTS = ["3.0.50.128", "localhost", "0.0.0.0", "kakojp.jp", "192.168.24", "103.138.88.53", "cms.dabosagroup.com", "dabosagroup.com", "127.0.0.1"]
 
 
 # Application definition
@@ -113,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'Asia/Tokyo'
+LANGUAGE_CODE = 'Asia/Ho_Chi_Minh'
 
-TIME_ZONE = 'Asia/Tokyo'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
@@ -132,8 +132,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = '/var/www/music/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = '/var/www/music/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

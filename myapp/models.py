@@ -1,75 +1,139 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.translation import gettext_lazy as _
-# Create your models here.
 
+class Category(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    # description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Danh mục'
+        verbose_name_plural = 'Danh mục'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+class SubCategory(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+    # description = models.TextField(blank=True, null=True)
+
+    category = models.ForeignKey(
+        Category, null=True, blank=True, on_delete=models.CASCADE, related_name='sub_categories'
+    )
+
+    class Meta:
+        verbose_name = 'Danh mục con'
+        verbose_name_plural = 'Danh mục con'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 class Blog(models.Model):
-    title = models.TextField(_('title'), max_length=320, null=False)
-    image = models.ImageField(_('image'), upload_to='images/')
-    # link = models.URLField(_('link'), max_length=200, null=True, blank=True)
-    featured = models.BooleanField(default=False, verbose_name='Bài viết nổi bật')
-    LIFE_COACH = 'LIFE_COACH'
-    FUNCTIONAL_FOODS = 'FUNCTIONAL_FOODS'
-    EDUCATION = 'EDUCATION'
-    TRANSLATE = 'TRANSLATE'
-    COURSE_LC = 'COURSE_LC'
-    COURSE_HP = 'COURSE_HP'
-    COURSE_JP = 'COURSE_JP'
-    INFO = 'INFO'
-    CATEGORY = [
-        ("LIFE_COACH", "LIFE COACH"),
-        ("FUNCTIONAL_FOODS", "THỰC PHẨM CHỨC NĂNG"),
-        ("EDUCATION", "GIÁO DỤC TIẾNG NHẬT"),
-        ("TRANSLATE", "PHIÊN DỊCH, DỊCH THUẬT NHẬT-VIỆT"),
-        ("COURSE_LC", "KHÓA HỌC LIFE COACH"),
-        ("COURSE_HP", "KHÓA HỌC CÁCH XEM CHỈ TAY"),
-        ("COURSE_JP", "KHÓA HỌC TIẾNG NHẬT"),
-        ("INFO", "GIỚI THIỆU"),
-    ]
-    category = models.CharField(
-        _('category'),
-        choices=CATEGORY,
-        max_length=20,
-        null=False,
-        default=LIFE_COACH
+    title = models.CharField(_('title'), max_length=200, null=False)
+    short_description = models.TextField(_('short_description'), max_length=320, null=False)
+    
+    thumbnail = models.ImageField(_('thumbnail'), upload_to='blog/', null=True, blank=True)
+
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name='blog_categories'
     )
-    short_description = models.CharField(max_length=200, null=False)
+
+    sub_category = models.ForeignKey(
+        SubCategory, on_delete=models.CASCADE, related_name='blog_sub_categories', null=True, blank=True
+    ) 
+
     content = RichTextUploadingField(_('content'), null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.pk)
-    
-class LinkYoutube(models.Model):
-    title = models.TextField(_('title'), max_length=255, null=False)
-    link = models.URLField(_('link'), max_length=300, null=False)
-    short_description = models.CharField(max_length=300, null=True, blank=True)
-    VIEWS = 'XEM NHIỀU'
-    VIDEO = 'VIDEO'
-    TYPE = [
-        ("VIEWS", "XEM NHIỀU"),
-        ("VIDEO", "VIDEO"),
-    ]
-    type_video = models.CharField(
-        _('type_video'),
-        choices=TYPE,
-        max_length=15,
-        null=False,
-        default=VIEWS
-    )
-    
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return str(self.pk)
+class Page(models.Model):
+    HOME = 'HOME'
+    DU_HOC = 'DU_HOC'
+    DU_LICH = 'DU_LICH'
+
+    PAGES_CHOICES = [
+        (HOME, 'Trang chủ'),
+        (DU_HOC, 'DU học'),
+        (DU_LICH, 'Du lịch'),
+    ]
+
+    thumbnail = models.ImageField(_('thumbnail'), upload_to='page/', null=False, blank=False)
+    url = models.URLField(max_length=500, null=False, blank=False)
+
+    type = models.CharField(
+        max_length=20,
+        choices=PAGES_CHOICES,
+        null=False,
+        blank=False
+    )
+
+
+class WebInfo(models.Model):
+    title = models.CharField(_('title'), max_length=320, null=False)
+    name = models.CharField(_('name'), max_length=320, null=False)
+    slogan = models.CharField(_('slogan'), max_length=320, null=False)
+    code = models.CharField(_('code'), max_length=320, null=False)
+    address = models.CharField(_('address'), max_length=320, null=False)
+    email = models.CharField(_('email'), max_length=320, null=False)
+    website = models.CharField(_('website'), max_length=320, null=False)
+    logo = models.ImageField(_('logo'), upload_to='webinfo/', null=False, blank=False)
+
+class WebInfoLink(models.Model):
+    web_info = models.ForeignKey(
+        WebInfo, on_delete=models.CASCADE, related_name='web_info_links'
+    )
+
+    YOUTUBE = 'YOUTUBE'
+    TIKTOK = 'TIKTOK'
+    FACEBOOK = 'FACEBOOK'
+
+    TYPE_CHOICES = [
+        (YOUTUBE, 'Trang chủ'),
+        (TIKTOK, 'Tiktok'),
+        (FACEBOOK, 'Facebook'),
+    ]
+
+    type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        null=False,
+        blank=False
+    )
+
+    url = models.URLField(max_length=500, null=False, blank=False)
+
+class WebInfoHotline(models.Model):
+    web_info = models.ForeignKey(
+        WebInfo, on_delete=models.CASCADE, related_name='web_info_hotlines'
+    )
+
+    DU_HOC = 'DU_HOC'
+    DU_LICH = 'DU_LICH'
+
+    TYPE_CHOICES = [
+        (DU_HOC, 'Du học'),
+        (DU_LICH, 'Du lịch'),
+    ]
+
+    type = models.CharField(
+        max_length=20,
+        choices=TYPE_CHOICES,
+        null=False,
+        blank=False
+    )
+
+    phone = models.CharField(_('phone'), max_length=320, null=False)
 
 class UserRegister(models.Model):
-    name = models.CharField(max_length=100, null=False)
-    phone = models.CharField(max_length=20, null=False)
-    email = models.CharField(max_length=100, null=False)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    email = models.CharField(max_length=100, null=True, blank=True)
+    service = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
