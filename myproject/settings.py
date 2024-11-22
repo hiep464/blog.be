@@ -184,7 +184,8 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 CORS_ALLOWED_ORIGINS = [
     # 'http://3.0.50.128',
     # 'http://kakojp.jp',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    "https://dabosagroup.com"
 ]
 
 # CSRF_TRUSTED_ORIGINS = [
