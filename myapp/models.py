@@ -32,7 +32,7 @@ class SubCategory(models.Model):
 
 class Blog(models.Model):
     title = models.CharField(_('title'), max_length=200, null=False)
-    short_description = models.TextField(_('short_description'), max_length=320, null=False)
+    short_description = models.TextField(_('short_description'), max_length=320, null=True, blank=True)
     
     thumbnail = models.ImageField(_('thumbnail'), upload_to='blog/', null=True, blank=True)
 
@@ -58,7 +58,7 @@ class Page(models.Model):
 
     PAGES_CHOICES = [
         (HOME, 'Trang chủ'),
-        (DU_HOC, 'DU học'),
+        (DU_HOC, 'Du học'),
         (DU_LICH, 'Du lịch'),
     ]
 
@@ -93,7 +93,7 @@ class WebInfoLink(models.Model):
     FACEBOOK = 'FACEBOOK'
 
     TYPE_CHOICES = [
-        (YOUTUBE, 'Trang chủ'),
+        (YOUTUBE, 'Youtube'),
         (TIKTOK, 'Tiktok'),
         (FACEBOOK, 'Facebook'),
     ]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, UserRegister, SubCategory, WebInfoLink, WebInfoHotline, Category, WebInfo
+from .models import Blog, UserRegister, SubCategory, WebInfoLink, WebInfoHotline, Category, WebInfo, Page
 from rangefilter.filters import (
     DateRangeFilterBuilder,
 )
@@ -31,11 +31,22 @@ class WebInfoAdmin(admin.ModelAdmin):
 
 admin.site.register(WebInfo, WebInfoAdmin)
 
+class PageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type')
+
+admin.site.register(Page, PageAdmin)
+
 class BlogAdmin(admin.ModelAdmin):
     search_fields = [
         'title',
     ]
-    list_display = ('id', 'title')
+    list_display = ('id', 'title', 'category', "sub_category")
+
+    list_filter = ['category', "sub_category"]
+
+    def category(self, obj):
+        return obj.category.name
+    
 
 admin.site.register(Blog, BlogAdmin)
 

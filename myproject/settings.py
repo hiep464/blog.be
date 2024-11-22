@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'corsheaders',
     'storages',
-    'rangefilter'
+    'rangefilter',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
