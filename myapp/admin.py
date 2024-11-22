@@ -60,3 +60,5 @@ class UserRegisterAdmin(admin.ModelAdmin):
     list_filter = [("created_at", DateRangeFilterBuilder(title="Ngày đăng ký"))]
 
 admin.site.register(UserRegister, UserRegisterAdmin)
+
+admin.site.site_header = "Trang quản trị của DABOSA"
