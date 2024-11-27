@@ -62,7 +62,6 @@ class Page(models.Model):
         (DU_LICH, 'Du lịch'),
     ]
 
-    thumbnail = models.ImageField(_('thumbnail'), upload_to='page/', null=False, blank=False)
     url = models.URLField(max_length=500, null=False, blank=False)
 
     type = models.CharField(
@@ -72,6 +71,11 @@ class Page(models.Model):
         blank=False
     )
 
+class PageThumbnail(models.Model):
+    page = models.ForeignKey(
+        Page, on_delete=models.CASCADE, related_name='page_thumbnails'
+    )
+    thumbnail = models.ImageField(_('thumbnail'), upload_to='page/', null=False, blank=False)
 
 class WebInfo(models.Model):
     title = models.CharField(_('title'), max_length=320, null=False)

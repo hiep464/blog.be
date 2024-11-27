@@ -158,7 +158,7 @@ CKEDITOR_CONFIGS = {
             ['Indent', 'Outdent'],
             ['Maximize'],
         ],
-        'extraPlugins': 'justify,liststyle,indent,image2',
+        'extraPlugins': 'justify,liststyle,indent',
     },
 }
 

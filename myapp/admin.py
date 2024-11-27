@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, UserRegister, SubCategory, WebInfoLink, WebInfoHotline, Category, WebInfo, Page
+from .models import Blog, UserRegister, SubCategory, WebInfoLink, WebInfoHotline, Category, WebInfo, Page, PageThumbnail
 from rangefilter.filters import (
     DateRangeFilterBuilder,
 )
@@ -31,8 +31,14 @@ class WebInfoAdmin(admin.ModelAdmin):
 
 admin.site.register(WebInfo, WebInfoAdmin)
 
+class PageThumbnailInline(admin.TabularInline):
+    model = PageThumbnail
+    fields = ['thumbnail']
+    extra = 5
+
 class PageAdmin(admin.ModelAdmin):
     list_display = ('id', 'type')
+    inlines = [PageThumbnailInline]
 
 admin.site.register(Page, PageAdmin)
 
